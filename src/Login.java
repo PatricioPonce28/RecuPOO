@@ -1,3 +1,5 @@
+import Ejercicio.AgregarProductos;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -45,19 +47,11 @@ public class Login {
                                 if (rol.equals("administrador")) {
                                     // Abrir ventana para administrador
                                     JFrame frame = new JFrame("Panel de Administración");
-                                    //frame.setContentPane(new Grades().gradesPanel);
-                                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                                    frame.setSize(600, 600);
-                                    frame.setLocationRelativeTo(null);
-                                    frame.setVisible(true);
+                                    AgregarProductos.init(frame);
                                 } else {
                                     // Abrir ventana para usuario normal
                                     JFrame frame = new JFrame("Panel de Usuario");
-                                    //frame.setContentPane(new Grades().gradesPanel);
-                                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                                    frame.setSize(600, 600);
-                                    frame.setLocationRelativeTo(null);
-                                    frame.setVisible(true);
+                                    AgregarProductos.init(frame);
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(null,
