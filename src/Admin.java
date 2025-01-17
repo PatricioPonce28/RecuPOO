@@ -1,4 +1,5 @@
-package Ejercicio;
+
+import Ejercicio.ConexionDB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +7,7 @@ import java.sql.ResultSet;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public class AgregarProductos {
+public class Admin {
     private JTabbedPane tabbedPane1;
     public JPanel usuario;
     private JTextField textNombre;
@@ -26,7 +27,7 @@ public class AgregarProductos {
     private JButton mostarUsuarios;
     private JPasswordField passwordField1;
 
-    public AgregarProductos() {
+    public Admin() {
 
         this.inicializarTablas();
         this.cargarDatosUsuarios();
@@ -40,7 +41,7 @@ public class AgregarProductos {
     }
 
     public static void init(JFrame frame) {
-        frame.setContentPane((new AgregarProductos()).usuario);
+        frame.setContentPane(new Admin().usuario);
         frame.setDefaultCloseOperation(2);
         frame.setSize(600, 600);
         frame.setLocationRelativeTo(null);

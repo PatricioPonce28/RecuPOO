@@ -1,3 +1,4 @@
+import Ejercicio.AgregarProductos;
 import Ejercicio.ConexionDB;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -20,7 +21,6 @@ public class Login {
     public JPanel loginPanel;
 
     public Login() {
-        this.$$$setupUI$$$();
         this.ingresarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try (Connection conn = ConexionDB.getInstance().getConnection()) {
@@ -39,10 +39,14 @@ public class Login {
                                 JFrame frame;
                                 if (rol.equals("administrador")) {
                                     frame = new JFrame("Panel de Administración");
+                                    AgregarProductos.init(frame);
+
                                 } else {
                                     frame = new JFrame("Panel de Usuario");
+                                    AgregarProductos.init(frame);
+
+
                                 }
-                                AgregarProductos.init(frame);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de autenticación", 0);
                             }
