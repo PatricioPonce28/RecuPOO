@@ -1,37 +1,31 @@
-import Ejercicio.AgregarProductos;
-
-import javax.swing.*;
-import java.awt.*;
+import Ejercicio.ConexionDB;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 public class Login {
     private JTextField userName;
     private JPasswordField userPass;
     private JButton ingresarButton;
     public JPanel loginPanel;
-    private Connection conn = null;
 
     public Login() {
-        ingresarButton.addActionListener(new ActionListener() {
-            @Override
+        this.$$$setupUI$$$();
+        this.ingresarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Datos de conexión
-                String url = "jdbc:mysql://bzlerfvwxgajjydlak0p-mysql.services.clever-cloud.com:3306/bzlerfvwxgajjydlak0p";
-                String username = "untmxbiu7cvvwswm";
-                String password = "HacLKXupYhnrDTvGAn6c";
-
-                try {
-                    // Cargar el driver y establecer conexión
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    conn = DriverManager.getConnection(url, username, password);
-
-                    // Obtener valores ingresados por el usuario
-                    String parametroName = userName.getText();
-                    String parametroPass = new String(userPass.getPassword());
-
-                    // Consulta SQL usando los campos correctos de la tabla usuarios
+                try (Connection conn = ConexionDB.getInstance().getConnection()) {
+                    String parametroName = Login.this.userName.getText();
+                    String parametroPass = new String(Login.this.userPass.getPassword());
                     String query = "SELECT * FROM usuarios WHERE nombre_usuario = ? AND password = ?";
 
                     try (PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -42,43 +36,22 @@ public class Login {
                             if (rs.next()) {
                                 String rol = rs.getString("rol");
                                 JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso\nRol: " + rol);
-
-                                // Verificar el rol del usuario
+                                JFrame frame;
                                 if (rol.equals("administrador")) {
-                                    // Abrir ventana para administrador
-                                    JFrame frame = new JFrame("Panel de Administración");
-                                    AgregarProductos.init(frame);
+                                    frame = new JFrame("Panel de Administración");
                                 } else {
-                                    // Abrir ventana para usuario normal
-                                    JFrame frame = new JFrame("Panel de Usuario");
-                                    AgregarProductos.init(frame);
+                                    frame = new JFrame("Panel de Usuario");
                                 }
+                                AgregarProductos.init(frame);
                             } else {
-                                JOptionPane.showMessageDialog(null,
-                                        "Usuario o contraseña incorrectos",
-                                        "Error de autenticación",
-                                        JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de autenticación", 0);
                             }
                         }
                     }
                 } catch (ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(null,
-                            "Error: Driver MySQL no encontrado\n" + ex.getMessage(),
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Error: Driver MySQL no encontrado\n" + ex.getMessage(), "Error", 0);
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null,
-                            "Error de conexión a la base de datos\n" + ex.getMessage(),
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                } finally {
-                    if (conn != null) {
-                        try {
-                            conn.close();
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
+                    JOptionPane.showMessageDialog(null, "Error de conexión a la base de datos\n" + ex.getMessage(), "Error", 0);
                 }
             }
         });
